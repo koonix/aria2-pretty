@@ -1,0 +1,100 @@
+Array of 2 items:
+  Index  0 Struct of 5 members:
+             Key:   String: 'completedLength'
+             Value: String: '13402112'
+             Key:   String: 'connections'
+             Value: String: '5'
+             Key:   String: 'downloadSpeed'
+             Value: String: '416377'
+             Key:   String: 'files'
+             Value: Array of 1 items:
+                      Index  0 Struct of 6 members:
+                                 Key:   String: 'completedLength'
+                                 Value: String: '8388608'
+                                 Key:   String: 'index'
+                                 Value: String: '1'
+                                 Key:   String: 'length'
+                                 Value: String: '104857600'
+                                 Key:   String: 'path'
+                                 Value: String: '/home/koonix/100MB.bin'
+                                 Key:   String: 'selected'
+                                 Value: String: 'true'
+                                 Key:   String: 'uris'
+                                 Value: Array of 5 items:
+                                          Index  0 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/100MB.bin'
+                                          Index  1 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/100MB.bin'
+                                          Index  2 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/100MB.bin'
+                                          Index  3 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/100MB.bin'
+                                          Index  4 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/100MB.bin'
+             Key:   String: 'totalLength'
+             Value: String: '104857600'
+  Index  1 Struct of 5 members:
+             Key:   String: 'completedLength'
+             Value: String: '10895360'
+             Key:   String: 'connections'
+             Value: String: '5'
+             Key:   String: 'downloadSpeed'
+             Value: String: '433118'
+             Key:   String: 'files'
+             Value: Array of 1 items:
+                      Index  0 Struct of 6 members:
+                                 Key:   String: 'completedLength'
+                                 Value: String: '8388608'
+                                 Key:   String: 'index'
+                                 Value: String: '1'
+                                 Key:   String: 'length'
+                                 Value: String: '1048576000'
+                                 Key:   String: 'path'
+                                 Value: String: '/home/koonix/1GB.bin'
+                                 Key:   String: 'selected'
+                                 Value: String: 'true'
+                                 Key:   String: 'uris'
+                                 Value: Array of 5 items:
+                                          Index  0 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/1GB.bin'
+                                          Index  1 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/1GB.bin'
+                                          Index  2 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/1GB.bin'
+                                          Index  3 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/1GB.bin'
+                                          Index  4 Struct of 2 members:
+                                                     Key:   String: 'status'
+                                                     Value: String: 'used'
+                                                     Key:   String: 'uri'
+                                                     Value: String: 'https://speed.hetzner.de/1GB.bin'
+             Key:   String: 'totalLength'
+             Value: String: '1048576000'
+

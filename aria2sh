@@ -1,10 +1,5 @@
 #!/bin/bash
 
-dir=$XDG_RUNTIME_DIR/aria2test
-trap exit INT TERM
-trap 'rm -rf -- "$dir"; pkill -P$$' EXIT
-mkdir -p -- "$dir"
-
 # TODO:
 #   - add a human-formatted downloadSpeed and totalLength to the output
 #   - add an ellipsized filename to the output
@@ -15,15 +10,39 @@ mkdir -p -- "$dir"
 
 main()
 {
+	msg=$(mktemp)
+
+	trap exit INT TERM
+	trap '
+		pkill -P$$
+		pwait -P$$
+		grep -Ev "^$|\<(aria2 will resume|see the log file)\>" "$msg"
+		rm -f "$msg"
+	' EXIT
+
 	download "$@" &
+
 	stty -echo -icanon time 0 min 0
 	echo -ne '\e[s'
+	state=init
 	while :; do
 		setvars 'completedLength' 'totalLength' 'connections' 'downloadSpeed'
+		bashpid=$BASHPID
+		if [[ $state == inactive ]]; then
+			pgrep -P$$ | while IFS= read -r pid; do
+				case $pid in
+					"$bashpid") ;;
+					*) pkill -P"$pid" ;;
+				esac
+			done
+			break
+		fi
 		[[ $totalLength -eq 0 ]] && continue
-		percent=$(divide "$(( completedLength * 100 ))" "$totalLength" )
+		local percent=$(divide "$(( completedLength * 100 ))" "$totalLength" )
+		local size="$(numshorten "$totalLength")B"
+		local speed="$(numshorten "$downloadSpeed")B/s"
 		echo -ne '\e[u\e[0J'
-		printf '%s%% %d %d wat' "$percent" "$downloadSpeed" "$connections"
+		printf '%s %s%% %s %d' "$size" "$percent" "$speed" "$connections"
 		sleep 0.05
 	done &
 	wait
@@ -33,20 +52,37 @@ main()
 download()
 {
 	aria2c \
-		'https://speed.hetzner.de/100MB.bin' \
-		--quiet \
-		--dir="$dir" \
+		--no-conf \
+		--split=16 \
+		--max-connection-per-server=16 \
+		--min-split-size=1M \
+		--max-tries=5 \
+		--retry-wait=10 \
+		--lowest-speed-limit=1K \
+		--user-agent=Mozilla/5.0 \
 		--enable-rpc \
 		--rpc-listen-port=65432 \
-		--rpc-secret='pacman' \
-		"$@"
+		--rpc-secret=pacman \
+		--console-log-level=error \
+		--show-console-readout=false \
+		--summary-interval=0 \
+		--download-result=hide \
+		"$@" >"$msg" 2>&1
 }
 
 # set aria2's download attributes as shell variables
 setvars()
 {
-	local string key value
+	local string key value rpc ret
+	rpc=$(rpc "$@")
+	ret=$?
+	if   [[ $state == init ]] && [[ $ret -eq 0 ]]; then
+		state=active
+	elif [[ $state == active ]] && [[ $ret -ne 0 ]]; then
+		state=inactive
+	fi
 	while IFS= read -r line; do
+		[[ $line == 'Array of 0 items:' ]] && state=inactive && break
 		string=${line#*\'}
 		string=${string%\'*}
 		case $line in
@@ -55,7 +91,7 @@ setvars()
 			*) key='' value='' ;;
 		esac
 		[[ -n $key ]] && [[ -n $value ]] && printf -v "$key" '%s' "$value"
-	done <<< "$(rpc "$@")"
+	done <<< "$rpc"
 }
 
 # get the given active download attributes from aria2 using xmlrpc-c
@@ -69,6 +105,17 @@ rpc()
 	xmlrpc http://localhost:65432/rpc \
 		aria2.tellActive 's/token\:pacman' "array/($keys)" \
 		2>/dev/null
+}
+
+# shorten and format the given number (eg. 4560 -> 4K)
+numshorten()
+{
+	local n=$1
+	if   (( n >= 10**9 )); then echo "$(divide "$n" "$(( 10**9 ))")G"
+	elif (( n >= 10**6 )); then echo "$(divide "$n" "$(( 10**6 ))")M"
+	elif (( n >= 10**3 )); then echo "$(divide "$n" "$(( 10**3 ))")K"
+	else echo "$n"
+	fi
 }
 
 # return the division result of the two given integers to two decimal points
